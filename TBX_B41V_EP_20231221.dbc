@@ -1,0 +1,363 @@
+VERSION " "
+NS_ : 
+	NS_DESC_
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	CAT_DEF_
+	CAT_
+	FILTER
+	BA_DEF_DEF_
+	EV_DATA_
+	ENVVAR_DATA_
+	SGTYPE_
+	SGTYPE_VAL_
+	BA_DEF_SGTYPE_
+	BA_SGTYPE_
+	SIG_TYPE_REF_
+	VAL_TABLE_
+	SIG_GROUP_
+	SIG_VALTYPE_
+	SIGTYPE_VALTYPE_
+
+BS_:
+
+BU_: TBOX CGW
+BO_ 1321 TBOX_1: 8 TBOX
+ SG_ REMOTEcontrolmode$_W : 21|4@0+(1,0)[0|15] "" Vector__XXX
+ SG_ LoUPwrMngtRemLvl$_W : 43|4@0+(1,0)[0|15] "" Vector__XXX
+ SG_ LoUPwrRemMngtVld$_W : 45|2@0+(1,0)[0|3] "" Vector__XXX
+BO_ 1293 CGW_1: 8 CGW
+ SG_ LoUPwrMngtSts(1)$_W : 11|4@0+(1,0)[0|15] "" Vector__XXX
+ SG_ LoUPwrMngtStatLvl(1)$_W : 15|4@0+(1,0)[0|15] "" Vector__XXX
+ SG_ LoUPwrStatMngtVld(1)$_W : 17|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ LoUPwrDynMngtVld(1)$_W : 19|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ LoUPwrMngtDynamcLvl(1)$_W : 23|4@0+(1,0)[0|15] "" Vector__XXX
+BO_ 1288 GW_IBS_1: 8 CGW
+ SG_ U_BATTBatteryvoltage$_W : 7|14@0+(0.0009765625,3)[3|18] "V" Vector__XXX
+ SG_ I_RANGEBatterycurrentrange$_W : 9|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ Batterycurrent$_W : 23|16@0+(0.0009765625,-32)[-1|1] "A" Vector__XXX
+ SG_ T_BATTBatterytemperature$_W : 39|8@0+(1,-40)[-40|105] "℃" Vector__XXX
+ SG_ currentStatus$_W : 49|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ Status_VoltageVoltageStatus$_W : 51|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ Status_TempTemperatureStatus$_W : 53|2@0+(1,0)[0|3] "" Vector__XXX
+BO_ 776 GW_IBS_2: 8 CGW
+ SG_ SOCCurrentStatus$_W : 7|8@0+(1,0)[0|100] "%" Vector__XXX
+ SG_ SOH_SULmax.possibleSOC,reducedbysulphation$_W : 15|8@0+(1,0)[0|100] "%" Vector__XXX
+ SG_ SOH_LAMStateofhealth$_W : 39|8@0+(0.5,0)[0|127] "Ah" Vector__XXX
+ SG_ SOH_CORStateofhealth$_W : 47|8@0+(0.0625,0)[0|15.875] "V" Vector__XXX
+ SG_ SOC_STATESOCStatus$_W : 51|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ SOH_SUL_StateSOH_SULstatus$_W : 53|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ SOH_LAM_STATESOH_LAMStatus$_W : 59|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ SOH_COR_STATESOH_CORStatus$_W : 61|2@0+(1,0)[0|3] "" Vector__XXX
+BO_ 777 GW_IBS_3: 8 CGW
+ SG_ accumulatedbatterycharge$_W : 7|16@0+(0.125,0)[0|8191.75] "Ah" Vector__XXX
+ SG_ accumulatedbatterydischarge$_W : 23|16@0+(0.125,0)[0|8191.75] "Ah" Vector__XXX
+BO_ 1447 GW_0x5A7: 64 CGW
+ SG_ PTCAN上收到NM报文0x422$_W : 1|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ TBUS上收到NM报文0x431$_W : 3|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ ADASdom上收到NM报文0x451$_W : 5|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ ADASdom上收到NM报文0x447$_W : 7|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ ADASdom上收到NM报文0x45E$_W : 9|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ ADASdom上收到NM报文0x448$_W : 11|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ ADASdom上收到NM报文0x449$_W : 13|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ ADASdom上收到NM报文0x44A$_W : 15|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ ADASdom上收到NM报文0x44C$_W : 17|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ BDCU的NM报文中sleep.ind$_W : 19|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ DCU_FL0x42F的NM报文中sleep.ind$_W : 21|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ DCU_FR0x42E的NM报文中sleep.ind$_W : 23|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ BLE0x45D的NM报文中sleep.ind$_W : 25|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ 收到DSMC0x426的NM报文中sleep.ind$_W : 27|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ PWC0x43E的NM报文中sleep.ind$_W : 29|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ CC0x424的NM报文中sleep.ind$_W : 31|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ SSBS0x43A的NM报文中sleep.ind$_W : 33|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ DVR0x440的NM报文中sleep.ind$_W : 35|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ SVM0x442的NM报文中sleep.ind$_W : 37|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ SWFB0x432的NM报文中sleep.ind$_W : 39|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ FHS0x421的NM报文中sleep.ind$_W : 41|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ AMP0x434的NM报文中sleep.ind$_W : 43|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ AAC0x423的NM报文中sleep.ind$_W : 45|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ PTCAN上发出NM报文0x419$_W : 47|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ TBUS上发出NM报文0x439$_W : 49|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ ADASdom上发出NM报文0x438$_W : 51|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ CGW0x437的NM报文中sleep.ind$_W : 53|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ CGW0x436的NM报文中sleep.ind$_W : 55|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ TIM0x452的NM报文中sleep.ind$_W : 57|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ WakeUpSourceofGW$_W : 71|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofTBOXfrom0x431$_W : 79|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofPCCUfrom0x422$_W : 87|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofADASfrom0x451$_W : 95|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofAPAfrom0x447$_W : 103|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofIMUfrom0x45E$_W : 111|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofCMRR_FLfrom0x448$_W : 119|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofCMRR_FRfrom0x449$_W : 127|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofCMRR_RLfrom0x44A$_W : 135|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofCMRR_RRfrom0x44C$_W : 143|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofBDCU$_W : 151|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofDCU_FL$_W : 159|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofDCU_FR$_W : 167|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofBLE$_W : 175|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofDSMC$_W : 183|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofPWC$_W : 191|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofICC$_W : 199|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofSSBS$_W : 207|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofDVR$_W : 215|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofSVM$_W : 223|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofSWFB$_W : 231|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofFHS$_W : 239|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofAAC$_W : 247|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofTIM$_W : 255|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ 由于ACANFD上的报文，导致GW无法进入到RSS状态$_W : 256|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ 由于ICAN上的报文，导致GW无法进入到RSS状态$_W : 257|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ 由于BCAN上的报文，导致GW无法进入到RSS状态$_W : 258|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ 由于TCANFD上的报文，导致GW无法进入到RSS状态$_W : 259|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ 由于PCAN上的报文，导致GW无法进入到RSS状态$_W : 260|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ 由于ETH激活线存在激活输入，导致GW无法进入到RSS状态$_W : 262|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ 由于KL15针脚存在输入，导致GW无法进入到RSS状态$_W : 263|1@0+(1,0)[0|1] "" Vector__XXX
+BO_ 1350 BDC_0x546: 8 CGW
+ SG_ FBM_L0x457的NM报文sleep.ind$_W : 1|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ FBM_R0x458的NM报文中sleep.ind$_W : 3|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ SLC0x45B的NM报文中sleep.ind$_W : 5|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ RBM_M0x45A的NM报文中sleep.ind$_W : 7|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ RBM_R0x456的NM报文中sleep.ind$_W : 9|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ WakeUpSourceofFBM_L$_W : 23|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofFBM_R$_W : 31|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofSLC$_W : 39|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofRBM_L$_W : 47|8@0+(1,0)[0|255] "" Vector__XXX
+ SG_ WakeUpSourceofRBM_R$_W : 55|8@0+(1,0)[0|255] "" Vector__XXX
+BO_ 416 EMS_1: 8 CGW
+ SG_ ThevalidindicationofEMS1_N_EngineSpeed.$_W : 4|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Actualenginespeed.(E=N)$_W : 15|16@0+(1,0)[0|7000] "rpm" Vector__XXX
+ SG_ 融合了ACC请求扭矩之后的油门位置$_W : 63|8@0+(0.392156862745098,0)[0|100] "%" Vector__XXX
+BO_ 1472 EMS_4: 8 CGW
+ SG_ ThevalidindicationofEMS4_N_CoolantTemperature$_W : 5|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ Enginecoolanttemperature（E=N-40）$_W : 15|8@0+(1,-40)[-40|215] "deg. C" Vector__XXX
+ SG_ timesinceenginestart$_W : 31|16@0+(1,0)[0|65535] "Second" Vector__XXX
+ SG_ 12VChargingFault$_W : 55|1@0+(1,0)[0|1] "" Vector__XXX
+BO_ 640 EMS_5: 8 CGW
+ SG_ indicatesthatBrakePedalispressed$_W : 17|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Lightsupthecheckenginelamp.$_W : 39|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Lightsuptheoilpressurewarninglamp$_W : 38|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Lightsuptheenginemillamp.$_W : 34|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Indicatesthattheengineisrunning$_W : 47|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Indicatesiftheenginehasstartedsuccessfully.$_W : 42|1@0+(1,0)[0|1] "" Vector__XXX
+BO_ 418 EMS_8: 8 CGW
+ SG_ 当前发动机飞轮端扭矩$_W : 4|13@0+(0.1,-200)[-200|600] "Nm" Vector__XXX
+BO_ 272 TCM_1: 8 CGW
+ SG_ 油温$_W : 7|8@0+(1,-40)[-40|214] "C" Vector__XXX
+ SG_ 长期扭矩$_W : 47|11@0+(1,-100)[-100|1000] "Nm" Vector__XXX
+BO_ 992 TCM_2: 8 CGW
+ SG_ Thissignalindicatesthegearleverforinstrumentdisplays$_W : 23|8@0+(1,0)[0|15] "" Vector__XXX
+ SG_ Checkgearboxlampondashboard$_W : 31|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ TCUinLimpHome$_W : 28|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Describestheinformationofcurrentengagedgear.$_W : 39|8@0+(1,0)[0|255] "" Vector__XXX
+BO_ 280 TCM_3: 8 CGW
+ SG_ TransmissioninputRPM（E=N）$_W : 15|15@0+(1,0)[0|32766] "rpm" Vector__XXX
+ SG_ TransmissionoutputRPM（E=N）$_W : 31|15@0+(1,0)[0|32766] "rpm" Vector__XXX
+BO_ 1248 TCM_5: 8 CGW
+ SG_ Gearboxtemperaturetoohigh$_W : 7|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Shiftpatternisusedtocalibration$_W : 30|7@0+(1,0)[0|127] "" Vector__XXX
+BO_ 1504 EGSM_1: 8 CGW
+ SG_ DriverRequestParkButton$_W : 12|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ E-shiftfault$_W : 23|1@0+(1,0)[0|1] "" Vector__XXX
+BO_ 792 WCBS_ESP_1: 8 CGW
+ SG_ Autohold功能标志位.(ForEPB)$_W : 5|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ ABScontrollingstatus.$_W : 0|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ TCS和VDC任一个失效$_W : 14|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Indicatewhetherornotdecelerationfunction$_W : 10|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ SignalindicatestolightupABSlampForWCBS:ABS失效$_W : 23|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ SignalindicatestolightupHDClamp$_W : 17|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ IndicatethatWCBSFaultstatus$_W : 47|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ BrakeFluidWarning$_W : 45|1@0+(1,0)[0|1] "" Vector__XXX
+BO_ 1600 WCBS_ESP_3: 8 CGW
+ SG_ thevalidvalueofESP3_N_FLWheelSpeed$_W : 7|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ FrontLeftWheelSpeed(E=N*0.0625)$_W : 5|14@0+(0.0625,0)[0|300] "km/h" Vector__XXX
+ SG_ thevalidvalueofESP3_N_FRWheelSpeed$_W : 23|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ FrontRightWheelSpeed(E=N*0.0625)$_W : 21|14@0+(0.0625,0)[0|300] "km/h" Vector__XXX
+BO_ 1616 WCBS_ESP_4: 8 CGW
+ SG_ ThissignalindicatesthevalidvalueofESP4_N_RLWheelSpeed$_W : 39|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ RearLeftWheelSpeed(E=N*0.0625)$_W : 37|14@0+(0.0625,0)[0|300] "km/h" Vector__XXX
+ SG_ ThissignalindicatesthevalidvalueofESP4_N_RRWheelSpeed$_W : 55|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ RearRightWheelSpeed(E=N*0.0625)$_W : 53|14@0+(0.0625,0)[0|300] "km/h" Vector__XXX
+BO_ 785 WCBS_ESP_5: 8 CGW
+ SG_ WCBSAEB模块激活信号$_W : 31|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ VehicleSpeed$_W : 39|13@0+(0.05625,0)[0|259.9875] "km/h" Vector__XXX
+BO_ 1008 WCBS_ESP_6: 8 CGW
+ SG_ 整车纵向加速度$_W : 15|12@0+(0.02,-25)[-25|25] "m/s2" Vector__XXX
+BO_ 578 WCBS_ESP_13: 8 CGW
+ SG_ VLC激活信号$_W : 2|1@0+(1,0)[0|1] "" Vector__XXX
+BO_ 784 WCBS_EPB_1: 8 CGW
+ SG_ ThestatusofEPBwarninglampstatus.$_W : 1|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ ThestatusofEPBswitch.$_W : 47|2@0+(1,0)[0|3] "" Vector__XXX
+BO_ 1297 WCBS_ATS_1: 8 CGW
+ SG_ ATSConfirmedMode$_W : 11|4@0+(1,0)[0|15] "" Vector__XXX
+BO_ 384 SAS_1: 8 CGW
+ SG_ Thevalueofrotationspeed$_W : 23|8@0+(4,0)[0|1016] "degree/ sec" Vector__XXX
+ SG_ Thevalueofsteeringangle$_W : 31|16@0+(0.1,-780)[-780|780] "degree" Vector__XXX
+BO_ 848 SDM_1: 8 CGW
+ SG_ 气囊故障提示$_W : 1|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ 爆炸状态$_W : 15|4@0+(1,0)[0|15] "" Vector__XXX
+BO_ 800 PCCU_TCCU_1: 8 CGW
+ SG_ current4WDStatus，2WD-4WD-4WDLowmodeactivation$_W : 11|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ 4WDECUfaultscode$_W : 31|8@0+(1,0)[0|255] "" Vector__XXX
+BO_ 562 PCCU_EDS_1: 8 CGW
+ SG_ EDSRearELockStatus$_W : 11|4@0+(1,0)[0|15] "" Vector__XXX
+ SG_ EDSFrontELockStatus$_W : 31|4@0+(1,0)[0|15] "" Vector__XXX
+ SG_ PCCU给IDS故障灯显示$_W : 57|2@0+(1,0)[0|1] "" Vector__XXX
+BO_ 1401 PCCU_SWH_1: 8 CGW
+ SG_ ThefeedbackstateofsteeringwheelheatingtoSWFB$_W : 7|2@0+(1,0)[0|3] "" Vector__XXX
+BO_ 323 EPS_1: 8 CGW
+ SG_ ThestatusoftheEPS（EPS的故障状态）$_W : 7|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ 驾驶员手力距$_W : 15|11@0+(0.01,-7.11)[-7.11|7.11] "Nm" Vector__XXX
+ SG_ ADAS与EPS握手信号$_W : 17|2@0+(1,0)[0|3] "" Vector__XXX
+BO_ 1264 ORIM_1: 8 CGW
+ SG_ 罗盘方向，8个$_W : 7|3@0+(1,0)[0|7] "" Vector__XXX
+ SG_ 大气压力$_W : 15|13@0+(0.1,300)[300|1100] "hpa" Vector__XXX
+ SG_ AroundthePitchAnglevaluesarevalidflag$_W : 18|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ AboutTiltingAnglevaluesarevalidflag$_W : 17|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ ORIM1_N_AltitudeHeightvaluesarevalidflag$_W : 16|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ 海拔高度$_W : 31|14@0+(1,-500)[-500|9000] "m" Vector__XXX
+ SG_ 罗盘角度$_W : 32|9@0+(1,0)[0|360] "°" Vector__XXX
+ SG_ 俯仰角$_W : 55|8@0+(1,-40)[-40|40] "°" Vector__XXX
+ SG_ 倾斜角$_W : 63|8@0+(1,-60)[-60|60] "°" Vector__XXX
+BO_ 1686 DVR_2: 8 CGW
+ SG_ Cameramalfunctionwarning$_W : 7|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ MPUstartwarning$_W : 6|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Communicationfailurewarning$_W : 5|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ SavingFileswarning$_W : 4|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Photooverflowwarning$_W : 2|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Recordingstatus,requestIPCtodisplay"DVRfault"$_W : 0|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ SDwarning$_W : 15|1@0+(1,0)[0|1] "" Vector__XXX
+BO_ 1424 PAS_1: 8 CGW
+ SG_ validofRearLeftRadarMalfunction$_W : 17|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ validofRearLeftCenterRadarMalfunction$_W : 16|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ validofRearRightCenterRadarMalfunction$_W : 25|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ validofRearRightRadarMalfunction$_W : 24|1@0+(1,0)[0|1] "" Vector__XXX
+BO_ 1568 CDC_IPC1: 8 CGW
+ SG_ Thewarningstatusofoillevel.$_W : 2|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Thevaildindicationofodometer$_W : 0|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Thevalueofodometer$_W : 23|32@0+(0.01,0)[0|2000000] "km" Vector__XXX
+BO_ 1313 CDC_IPC4: 8 CGW
+ SG_ ThevalueofAveragefuelconsumption$_W : 7|12@0+(0.1,0)[0|409.5] "L/100KM" Vector__XXX
+ SG_ ThevalueofInstantaneousfuelconsumption$_W : 31|12@0+(0.1,0)[0|409.5] "L/100KM" Vector__XXX
+ SG_ EnduranceMileage$_W : 35|12@0+(1,0)[0|4095] "KM" Vector__XXX
+ SG_ Remainingmaintenancemileage$_W : 55|16@0+(1,-10239)[-10239|55295] "Km" Vector__XXX
+BO_ 1311 ICC_IPC_5: 8 CGW
+ SG_ 小计里程1，自复位后$_W : 7|24@0+(0.1,0)[0|100000] "km" Vector__XXX
+ SG_ AverageFuelConsumptionafterreset，自复位后$_W : 27|12@0+(0.1,0)[0|30] "L/100km" Vector__XXX
+ SG_ AverageFuelConsumptionagterrestart，自启动后$_W : 47|12@0+(0.1,0)[0|30] "L/100km" Vector__XXX
+ SG_ averagefuelconsumption3，afterrefueling$_W : 51|12@0+(0.1,0)[0|30] "L/100km" Vector__XXX
+BO_ 544 CDC_IPC6: 8 CGW
+ SG_ Theremainingfuellevel(%).$_W : 7|8@0+(0.39215,0)[0|100] "%" Vector__XXX
+BO_ 1310 ICC_IPC7: 8 CGW
+ SG_ 小计里程2，自启动后$_W : 23|24@0+(0.1,0)[0|100000] "km" Vector__XXX
+ SG_ 小计里程3，自加油后$_W : 47|24@0+(0.1,0)[0|100000] "km" Vector__XXX
+BO_ 1328 AAC_1: 8 CGW
+ SG_ Environmenttemperature$_W : 23|8@0+(1,-40)[-40|100] "deg. C" Vector__XXX
+ SG_ Incartemperature$_W : 47|8@0+(1,-40)[-40|100] "deg. C" Vector__XXX
+BO_ 885 AAC_2: 8 CGW
+ SG_ BlowerMode吹风模式$_W : 7|3@0+(1,0)[0|7] "" Vector__XXX
+ SG_ Blowerlevel,风量级别$_W : 3|4@0+(1,0)[0|15] "" Vector__XXX
+ SG_ ACAUTOdisplayStatus$_W : 13|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ thissignalindicateiftheACsystemisON$_W : 12|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ FrontdefrostStatus$_W : 11|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Driverthrottletemperaturedisplay$_W : 23|5@0+(0.5,18)[18|32] "deg. C" Vector__XXX
+ SG_ PM2.5显示值信号$_W : 47|10@0+(1,0)[0|999] "μg/m3" Vector__XXX
+ SG_ Recirculatestatus$_W : 49|2@0+(1,0)[0|3] "" Vector__XXX
+BO_ 1392 BDC_CAPE_1: 8 CGW
+ SG_ Vehiclepowermode$_W : 5|3@0+(1,0)[0|7] "" Vector__XXX
+ SG_ Keydetectedinvehicle1$_W : 33|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Keydetectedinvehicle2$_W : 32|1@0+(1,0)[0|1] "" Vector__XXX
+BO_ 1408 BDC_CAPE_2: 8 CGW
+ SG_ yellowalarm(IPCdisplaymessage:PEPSsystemerror)$_W : 39|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ redalarm(IPCdisplaymessage:PEPSsystemerror)$_W : 38|1@0+(1,0)[0|1] "" Vector__XXX
+BO_ 1184 BDC_BCM_1: 8 CGW
+ SG_ Thestatusofrearwindowsdefrost$_W : 3|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ Thestatusofhighlamp$_W : 8|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ TheCommandofLeftturnLamp$_W : 23|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Thestatusofleftturnlamp$_W : 22|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ TheCommandofRightturnLamp$_W : 21|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Thestatusofrightturnlamp$_W : 20|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Thestatusofpositionlamp$_W : 19|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Anti-thelfindicationstatus$_W : 18|3@0+(1,0)[0|7] "" Vector__XXX
+ SG_ Thestatusofthedriverdoorlockswitch$_W : 31|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ ThestatusofthePassengedoorlockswitch$_W : 30|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ ThestatusofDriverdoorswitch$_W : 29|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ ThestatusofPassengerdoorswitch$_W : 28|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Thestatusoftherearleftdoorswitch$_W : 27|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Thestatusoftherearrightdoorswitch$_W : 26|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ ThestatusoftrunkDoorswitch$_W : 25|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Thestatusofhood$_W : 24|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Thestatusoflowbeam$_W : 46|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ 尾门锁状态$_W : 44|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Thestatusofhazardindicator$_W : 42|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ TheCommandofHighLamp$_W : 41|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ TheCommandofLowbeam$_W : 40|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Thestatusofdaytimerunninglamp$_W : 51|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ ThestatusofFrontFoglamp$_W : 62|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ ThestatusofRearFoglamp$_W : 60|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Thestatusofreverselamp$_W : 59|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Thestatusofbrakelamp$_W : 57|1@0+(1,0)[0|1] "" Vector__XXX
+BO_ 1203 BDC_BCM_2: 8 CGW
+ SG_ rearleft门窗位置信号$_W : 5|4@0+(1,0)[0|15] "" Vector__XXX
+ SG_ frontleft门窗位置信号$_W : 31|4@0+(1,0)[0|15] "" Vector__XXX
+ SG_ frontright门窗位置信号，防夹模块发$_W : 27|4@0+(1,0)[0|15] "" Vector__XXX
+ SG_ RR门窗位置信号$_W : 63|4@0+(1,0)[0|15] "" Vector__XXX
+ SG_ 左后锁状态$_W : 58|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ 右后锁状态$_W : 57|1@0+(1,0)[0|1] "" Vector__XXX
+BO_ 866 BDC_BCM_4: 8 CGW
+ SG_ DriverSeatbeltBuckleSwitchStatus$_W : 12|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ PassengerSeatbeltBuckleSwitchStatus$_W : 11|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ ReportSunshadepositionSSCU$_W : 23|4@0+(1,0)[0|15] "" Vector__XXX
+ SG_ Reportsunroofposition$_W : 39|4@0+(1,0)[0|15] "" Vector__XXX
+BO_ 1383 BDC_BCM_9: 8 CGW
+ SG_ CheckerrorhappenReportingtotheNetworkSRCU$_W : 19|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ ReportHallsensorFaultstatusSRCU$_W : 18|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ 天窗继电器故障$_W : 28|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ CheckerrorhappenReportingtotheNetworkSSCU$_W : 39|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ ReportRelaystatusSSCU$_W : 38|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ ReportHallsensorstatusSSCU$_W : 37|1@0+(1,0)[0|1] "" Vector__XXX
+BO_ 1385 BDC_BCM_10: 8 CGW
+ SG_ Lightsensorfaultstatus光亮传感器故障状态$_W : 7|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Rainsensorfaultstatus雨量传感器故障状态$_W : 22|1@0+(1,0)[0|1] "" Vector__XXX
+BO_ 1344 BDC_TPMS: 8 CGW
+ SG_ Leftfronttirepressure$_W : 15|8@0+(1.373,0)[0|350.115] "kpa" Vector__XXX
+ SG_ Rightfronttirepressure$_W : 23|8@0+(1.373,0)[0|350.115] "kpa" Vector__XXX
+ SG_ Rightreartirepressure$_W : 31|8@0+(1.373,0)[0|350.115] "kpa" Vector__XXX
+ SG_ Leftreartirepressure$_W : 39|8@0+(1.373,0)[0|350.115] "kpa" Vector__XXX
+ SG_ Tiretemperature$_W : 47|8@0+(1,-40)[-40|125] "degC" Vector__XXX
+ SG_ LFtirepressurewarningstatus$_W : 55|3@0+(1,0)[0|7] "" Vector__XXX
+ SG_ RFtirepressurewarningstatus$_W : 52|3@0+(1,0)[0|7] "" Vector__XXX
+ SG_ RRtirepressurewarningstatus$_W : 63|3@0+(1,0)[0|7] "" Vector__XXX
+ SG_ LRtirepressurewarningstatus$_W : 60|3@0+(1,0)[0|7] "" Vector__XXX
+ SG_ Temperaturewarning$_W : 57|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ Systemwarning$_W : 56|1@0+(1,0)[0|1] "" Vector__XXX
+BO_ 1360 DSM_1: 8 CGW
+ SG_ TheLightofDriverSeatHeat$_W : 51|3@0+(1,0)[0|7] "" Vector__XXX
+ SG_ TheLightofDriverSeatVentilation$_W : 48|3@0+(1,0)[0|7] "" Vector__XXX
+ SG_ TheLightofPassageSeatHeat$_W : 61|3@0+(1,0)[0|7] "" Vector__XXX
+ SG_ TheLightofPassageSeatVentilation$_W : 58|3@0+(1,0)[0|7] "" Vector__XXX
+BO_ 1508 FDCA_1: 8 CGW
+ SG_ LDWMode$_W : 11|3@0+(1,0)[0|7] "" Vector__XXX
+ SG_ LKAMode$_W : 21|3@0+(1,0)[0|7] "" Vector__XXX
+ SG_ FCWMode$_W : 39|3@0+(1,0)[0|7] "" Vector__XXX
+BO_ 1351 FDCA_2: 8 CGW
+ SG_ HMA状态机（远近灯光切换功能）$_W : 23|3@0+(1,0)[0|7] "" Vector__XXX
+ SG_ ThestatusoftheACCcontrolunit.$_W : 20|4@0+(1,0)[0|15] "" Vector__XXX
+ SG_ TJAModeTJA状态机$_W : 39|3@0+(1,0)[0|7] "" Vector__XXX
+ SG_ 前视摄像头状态$_W : 47|2@0+(1,0)[0|3] "" Vector__XXX
+BO_ 838 FDCA_3: 8 CGW
+ SG_ AEB请求减速度$_W : 7|16@0+(0.0004882,-16)[-16|15.994187] "m/s^2" Vector__XXX
+ SG_ AEB激活$_W : 16|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ ACC请求减速度$_W : 31|11@0+(0.005,-5)[-5|5.235] "m/s^2" Vector__XXX
+BO_ 582 FDCA_4: 8 CGW
+ SG_ AEBMode$_W : 42|3@0+(1,0)[0|7] "" Vector__XXX
+BO_ 583 ADAS1_ACANFD: 8 CGW
+ SG_ 系统失效状态此信号表示自动ADAS系统失效状态$_W : 4|1@0+(1,0)[0|1] "" Vector__XXX
+ SG_ ADAS请求角度标识位$_W : 10|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ ADAS请求角度$_W : 23|16@0+(0.1,-780)[-780|780] "°" Vector__XXX
+BO_ 915 ADAS2_ACANFD: 64 CGW
+ SG_ 雷达状态信息$_W : 45|2@0+(1,0)[0|3] "" Vector__XXX
+ SG_ SAS激活状态$_W : 50|3@0+(1,0)[0|7] "" Vector__XXX
+ SG_ NOA状态$_W : 79|4@0+(1,0)[0|15] "" Vector
