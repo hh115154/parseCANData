@@ -2,12 +2,18 @@
  * @Author: yanghongxu@bhap.com.cn
  * @Date: 2024-07-24 16:08:36
  * @LastEditors: yanghongxu@bhap.com.cn
- * @LastEditTime: 2024-07-24 16:11:15
+ * @LastEditTime: 2024-07-26 15:55:10
  * @FilePath: /parseCANData/dbc_parse/my_interfaces.cpp
  * @Description: 
  * 
  * Copyright (c) 2024 by ${git_email}, All Rights Reserved. 
  */
+
+#include <iostream>
+#include <fstream>
+#include<sstream>
+#include<vector>
+#include"string.h"
 
 #include "my_interfaces.hpp"
 
@@ -86,3 +92,44 @@ int32_t usrDefChannelVal(const float& physicalVal)
 {
     return (int32_t)(physicalVal*1000);
 }
+
+string getFileContent(const string& filename) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        throw runtime_error("Unable to open file");
+    }
+    string content{istreambuf_iterator<char>(file), istreambuf_iterator<char>()};
+    file.close();
+    return content;
+}
+
+vector<uint16_t> parseNumbers(const string& str) {
+    vector<uint16_t> numbers;
+    istringstream iss(str);
+    string token;
+ 
+    while (getline(iss, token, ',')) {
+        numbers.push_back(stoi(token));
+    }
+ 
+    return numbers;
+}
+
+vector<string> split_string_by_newline(const string& str) {
+    vector<string> lines;
+    size_t start = 0;
+    size_t end = str.find('\n');
+ 
+    while (end != string::npos) {
+        lines.push_back(str.substr(start, end - start));
+        start = end + 1; // 跳过换行符
+        end = str.find('\n', start);
+    }
+ 
+    // 添加最后一行，它可能不以换行符结束
+    lines.push_back(str.substr(start));
+ 
+    return lines;
+}
+
+
