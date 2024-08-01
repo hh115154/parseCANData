@@ -2,7 +2,7 @@
  * @Author: yanghongxu@bhap.com.cn
  * @Date: 2024-07-23 14:18:29
  * @LastEditors: yanghongxu@bhap.com.cn
- * @LastEditTime: 2024-08-01 15:34:17
+ * @LastEditTime: 2024-08-01 16:35:34
  * @FilePath: /parseCANData/main.cpp
  * @Description: 
  * 
@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include<string>
 #include<iostream>
+#include <iomanip>
+#include<chrono>
 #include <iomanip>
 #include<fstream>
 #include<vector>
@@ -65,18 +67,11 @@ int main(int argc, char* argv[]){
 		
 	}
 
-	try
-	{
-		/* code */
-		Database dbc(dbc_file);
-		msg_inDBC = dbc.getMessages();
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << e.what() << '\n';
-		cout<<"Error: dbc file parse failed!"<<endl;
-		return 0;
-	}
+
+	/* code */
+	Database dbc(dbc_file);
+	msg_inDBC = dbc.getMessages();
+
 	
 	try
 	{
@@ -154,8 +149,24 @@ void parse_logfile(string log_file){
 
 }
 
+void gettm(long long timestamp)
+{
+    auto milli = timestamp + (long long)8 * 60 * 60 * 1000; //此处转化为东八区北京时间，如果是其它时区需要按需求修改
+    auto mTime = std::chrono::milliseconds(milli);
+    auto tp = std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds>(mTime);
+    auto tt = std::chrono::system_clock::to_time_t(tp);
+    std::tm *now = gmtime(&tt);
 
-const string gpsInfoKeys[] = {"longitude","latitude","Altitude","bearing","speed","IPC1_N_OdoMeter"};	
+	//打印时间字符串
+	cout<<endl<<"GnssInfo : ";
+	cout << std::put_time(now, "%Y-%m-%d %H:%M:%S");
+	cout<<"."<<dec<<timestamp%1000<<endl;
+
+
+}
+
+#define GPS_INFO_NUM 6
+const string gpsInfoKeys[GPS_INFO_NUM] = {"longitude","latitude","Altitude","bearing","speed","IPC1_N_OdoMeter"};	
 void parse_gpsInfo(const string& orgLog,const string& timeStamp){
 	string outpStr = timeStamp;
 	vector<string> gpsInfoVals;
@@ -167,20 +178,23 @@ void parse_gpsInfo(const string& orgLog,const string& timeStamp){
 		string tmp = orgLog.substr(idx+1,num-idx-1);
 		istringstream iss(tmp);
 		string token;
-	
-		while (getline(iss, token, ',')) {
-			gpsInfoVals.push_back(token);
-		}
-		}else{
-			cout<<"Error: parse a log line failed!"<<endl;
-		}
+
+		getline(iss, token, ',');
+		uint64_t time_stamp = stol(token);
+
+		gettm(time_stamp);
+		int siz = gpsInfoKeys->length();
 		
-		for (string gpsinfo: gpsInfoVals)
+		for (size_t i = 0; i < GPS_INFO_NUM; i++)//
 		{
-			cout<<", "<<gpsinfo;
+			getline(iss, token, ',');
+			cout<<gpsInfoKeys[i]<<" = "<<token<<",";
 		}
-		cout<<endl;
 		
+
+		cout<<endl;
+
+	}	
 	
 }
 
@@ -250,10 +264,6 @@ void parse_aSingle_line(string s){
 
 		if (msg_inDBC.find(msgID)!=msg_inDBC.end())
 		{
-			if (msgID == 915)
-			{
-				cout<<"msgID = 915"<<endl;
-			}
 			
 			unordered_map<string, const Signal *> sigs = msg_inDBC[msgID]->getSignals();
 			cout<<"signals counter in this Frame = "<<dec<<sigs.size()<<endl;
