@@ -2,7 +2,7 @@
  * @Author: yanghongxu@bhap.com.cn
  * @Date: 2024-07-23 14:18:29
  * @LastEditors: yanghongxu@bhap.com.cn
- * @LastEditTime: 2024-08-01 14:37:00
+ * @LastEditTime: 2024-08-01 15:34:17
  * @FilePath: /parseCANData/main.cpp
  * @Description: 
  * 
@@ -20,11 +20,17 @@
 
 using namespace std;
 using namespace AS::CAN::DbcLoader;
-// string log_file = "/home/hh/桌面/0716DBCLOg/qllog/ql_log.txt";
-string log_file = "/home/hh/桌面/0716DBCLOg/qllog/ql_log.txt.001";
-string dbc_file = "/home/hh/桌面/parseCANData/TBX_B41V_EP_20231221.dbc";
-string outp_folder = "/home/hh/桌面/parseCANData/";
-string outp_logfile_name = "parsed_log.txt";
+#define PLATFORM_LINUX
+
+#ifdef PLATFORM_LINUX
+string log_file = "/home/hh/桌面/0716DBCLOg/qllog/ql_log.txt";
+string dbc_file = "/home/hh/桌面/B41VTB_LogParser/local/TBX_B41V_EP_20231221.dbc";
+string outp_logfile_name = "/home/hh/桌面/0716DBCLOg/qllog/parsed_log.txt";
+#else
+string log_file = "C:/Users/yangh/Desktop/0716DBCLOg/qllog/ql_log1.txt";
+string dbc_file = "C:/Users/yangh/Desktop/B41VTB_LogParser/local/TBX_B41V_EP_20231221.dbc";
+string outp_logfile_name = "C:/Users/yangh/Desktop/0716DBCLOg/qllog/parsed_log.txt";
+#endif
 
 void parse_dbc(string dbc_file, unordered_map<unsigned int, const Message *>& messages);
 void parse_logfile(string log_file);
