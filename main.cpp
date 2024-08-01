@@ -2,7 +2,7 @@
  * @Author: yanghongxu@bhap.com.cn
  * @Date: 2024-07-23 14:18:29
  * @LastEditors: yanghongxu@bhap.com.cn
- * @LastEditTime: 2024-07-29 14:00:05
+ * @LastEditTime: 2024-08-01 14:37:00
  * @FilePath: /parseCANData/main.cpp
  * @Description: 
  * 
@@ -20,7 +20,8 @@
 
 using namespace std;
 using namespace AS::CAN::DbcLoader;
-string log_file = "/home/hh/桌面/0716DBCLOg/qllog/ql_log.txt";
+// string log_file = "/home/hh/桌面/0716DBCLOg/qllog/ql_log.txt";
+string log_file = "/home/hh/桌面/0716DBCLOg/qllog/ql_log.txt.001";
 string dbc_file = "/home/hh/桌面/parseCANData/TBX_B41V_EP_20231221.dbc";
 string outp_folder = "/home/hh/桌面/parseCANData/";
 string outp_logfile_name = "parsed_log.txt";
@@ -58,16 +59,48 @@ int main(int argc, char* argv[]){
 		
 	}
 
-	Database dbc(dbc_file);
-	msg_inDBC = dbc.getMessages();
-
-	string strLogfile = getFileContent(log_file);
+	try
+	{
+		/* code */
+		Database dbc(dbc_file);
+		msg_inDBC = dbc.getMessages();
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+		cout<<"Error: dbc file parse failed!"<<endl;
+		return 0;
+	}
+	
+	try
+	{
+		/* code */
+		string strLogfile = getFileContent(log_file);
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+		cout<<"Error: get log file contnet faild!"<<endl;
+		return 0;
+	}
+	
 
 	ofstream outfile(outp_logfile_name);
 	streambuf* default_bkp = cout.rdbuf(outfile.rdbuf());
 
 	// parse_logfile_content(strLogfile);
-	parse_logfile(log_file);
+	try
+	{
+		/* code */
+		parse_logfile(log_file);
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+		cout<<"Error: parse log file failed!"<<endl;
+		return 0;
+	}
+	
 
 	cout.rdbuf(default_bkp);
 	outfile.close();
@@ -116,6 +149,38 @@ void parse_logfile(string log_file){
 }
 
 
+const string gpsInfoKeys[] = {"longitude","latitude","Altitude","bearing","speed","IPC1_N_OdoMeter"};	
+void parse_gpsInfo(const string& orgLog,const string& timeStamp){
+	string outpStr = timeStamp;
+	vector<string> gpsInfoVals;
+
+	int idx=orgLog.find("\"");  //从每行的第一个引号位置开始截取
+	int num=orgLog.find_last_of(",");//从每行的最后一个逗号位置开结束
+	if(idx != -1 && num != -1)
+	{
+		string tmp = orgLog.substr(idx+1,num-idx-1);
+		istringstream iss(tmp);
+		string token;
+	
+		while (getline(iss, token, ',')) {
+			gpsInfoVals.push_back(token);
+		}
+		}else{
+			cout<<"Error: parse a log line failed!"<<endl;
+		}
+		
+		for (string gpsinfo: gpsInfoVals)
+		{
+			cout<<", "<<gpsinfo;
+		}
+		cout<<endl;
+		
+	
+}
+
+
+
+
 void parse_aSingle_line(string s){
 	string tmp;
 	//获取s单位时间戳字符串
@@ -124,6 +189,14 @@ void parse_aSingle_line(string s){
 	const int time_s_stamp_len = 14;//sample:07-23 16:03:37
 	time_s_stamp_str = s.substr(idx_tstp+1,time_s_stamp_len);
 
+
+	//case1,normal CAN frame,case2,parsed msg per 1s
+	if (s.length() > 500)
+	{
+		parse_gpsInfo(s,time_s_stamp_str);
+		return;
+	}
+	
 	
 	int idx=s.find("\"");  //从每行的第一个引号位置开始截取
 	int num=s.find_last_of(",");//从每行的最后一个逗号位置开结束
@@ -171,6 +244,11 @@ void parse_aSingle_line(string s){
 
 		if (msg_inDBC.find(msgID)!=msg_inDBC.end())
 		{
+			if (msgID == 915)
+			{
+				cout<<"msgID = 915"<<endl;
+			}
+			
 			unordered_map<string, const Signal *> sigs = msg_inDBC[msgID]->getSignals();
 			cout<<"signals counter in this Frame = "<<dec<<sigs.size()<<endl;
 			for (auto sig:sigs)
@@ -194,6 +272,8 @@ void parse_aSingle_line(string s){
 			cout<<s<<endl;
 		}
 
+	}else{
+		cout<<"Error: parse a normal frame failed!"<<endl;
 	}
 
 }
