@@ -2,8 +2,8 @@
  * @Author: yanghongxu@bhap.com.cn
  * @Date: 2024-07-24 16:08:36
  * @LastEditors: yanghongxu@bhap.com.cn
- * @LastEditTime: 2024-07-26 15:55:10
- * @FilePath: /parseCANData/dbc_parse/my_interfaces.cpp
+ * @LastEditTime: 2024-09-26 13:36:04
+ * @FilePath: /parseCANDataWin/dbc_parse/my_interfaces.cpp
  * @Description: 
  * 
  * Copyright (c) 2024 by ${git_email}, All Rights Reserved. 
@@ -14,7 +14,7 @@
 #include<sstream>
 #include<vector>
 
-
+#include<cstring>
 
 #include "my_interfaces.hpp"
 
@@ -25,7 +25,7 @@ void my_memcpy(void* dst,const void* src,size_t len,bool isBE)
             ((uint8_t*)dst)[i] = ((uint8_t*)src)[len-1-i];
         }
     }else{
-        memcpy(dst,src,len);
+        ::memcpy(dst,src,len);
     }
 }
 
