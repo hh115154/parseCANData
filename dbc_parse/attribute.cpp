@@ -18,13 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "common_defs.hpp"
-#include "attribute.hpp"
 
 #include <memory>
 #include <sstream>
 #include <vector>
 
+#include "common_defs.hpp"
+#include "attribute.hpp"
 namespace AS
 {
 namespace CAN

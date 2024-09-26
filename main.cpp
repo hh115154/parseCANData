@@ -8,7 +8,6 @@
  * 
  * Copyright (c) 2024 by ${git_email}, All Rights Reserved. 
  */
-#include <stdio.h>
 #include<string>
 #include<iostream>
 #include <iomanip>
@@ -16,13 +15,12 @@
 #include <iomanip>
 #include<fstream>
 #include<vector>
-#include"string.h"
 #include "database.hpp"
 #include "my_interfaces.hpp"
 
 using namespace std;
 using namespace AS::CAN::DbcLoader;
-#define PLATFORM_LINUX
+// #define PLATFORM_LINUX
 
 #ifdef PLATFORM_LINUX
 string log_file = "/home/hh/桌面/0716DBCLOg/qllog/ql_log.txt";

@@ -24,7 +24,7 @@
 #include <array>
 #include <exception>
 #include <unordered_map>
-
+#include<string>
 namespace AS
 {
 namespace CAN

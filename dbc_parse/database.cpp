@@ -18,10 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "database.hpp"
 
 #include <algorithm>
-#include <cstring>
 #include <fstream>
 #include <iostream>
 #include <iterator>
@@ -31,8 +29,11 @@
 #include <sstream>
 #include <unordered_map>
 #include <vector>
-#include "iconv.h"
+#include <iconv.h>
 
+#include <string.h>
+
+#include "database.hpp"
 
 static int gb2312toutf8(char *sourcebuf, size_t sourcelen, char *destbuf, size_t destlen) {
 	iconv_t cd;
