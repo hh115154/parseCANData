@@ -2,8 +2,8 @@
  * @Author: yanghongxu@bhap.com.cn
  * @Date: 2024-07-24 16:08:36
  * @LastEditors: yanghongxu@bhap.com.cn
- * @LastEditTime: 2024-09-26 13:36:04
- * @FilePath: /parseCANDataWin/dbc_parse/my_interfaces.cpp
+ * @LastEditTime: 2024-11-21 17:23:50
+ * @FilePath: /parseCANData/dbc_parse/my_interfaces.cpp
  * @Description: 
  * 
  * Copyright (c) 2024 by ${git_email}, All Rights Reserved. 
@@ -37,7 +37,7 @@ int32_t getSignalValInCanBuf(const uint8_t* buf,uint16_t startBit,uint16_t len,b
     if(len > 32)
     {
         //now we only sppport parsing signals with len no more than 32bits
-        cout<< "DBC_PARSE_TAG,signal is too long with len = "<<len<<endl;
+        // cout<< "DBC_PARSE_TAG,signal is too long with len = "<<len<<endl;
         return 0;
     }
     uint8_t startByte=0;

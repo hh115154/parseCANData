@@ -399,7 +399,7 @@ void Database::parse(std::istream & reader)
         if (desc_type == "BU_") {  // BUS NODE COMMENT
           bus_node_comments.emplace_back(std::move(line));
         } else if (desc_type == PREAMBLES[3]) {  // MESSAGE COMMENT
-        std::cout<<"message line is "<<line<<std::endl;
+        // std::cout<<"message line is "<<line<<std::endl;
           message_comments.emplace_back(std::move(line));
         } else if (desc_type == PREAMBLES[4]) {  // SIGNAL COMMENT
           signal_comments.emplace_back(std::move(line));
