@@ -18,6 +18,7 @@
 #include "database.hpp"
 #include "my_interfaces.hpp"
 
+
 using namespace std;
 using namespace AS::CAN::DbcLoader;
 // #define PLATFORM_LINUX
@@ -47,7 +48,7 @@ const string CSV_SPLIT_NOTICE = ";";
 
 #define GPS_INFO_NUM 6
 const string gpsInfoKeys[GPS_INFO_NUM] = {"longitude","latitude","Altitude","bearing","speed","IPC1_N_OdoMeter"};
-string dataLineHead[] = {"--","00:00:00","0","0","0","0","0","0"};
+string dataLineHead[] = {"--","date","00:00:00","0","0","0","0","0","0"};
 
 
 /*
@@ -124,7 +125,7 @@ int main(int argc, char* argv[]){
 void parse_dbc_signals( unordered_map<unsigned int, const Message *>& messages,unordered_map<string,int>& signals_pos_map)
 {
 	//构造文件头，首行头，非CAN信号
-	cout<<"VIN"<<CSV_SPLIT_NOTICE<<"timestamp"<<CSV_SPLIT_NOTICE;
+	cout<<"VIN"<<CSV_SPLIT_NOTICE<<"Date"<<CSV_SPLIT_NOTICE<<"time"<<CSV_SPLIT_NOTICE;
 	for (size_t i = 0; i < GPS_INFO_NUM; i++)
 	{
 		cout<<gpsInfoKeys[i];
@@ -132,7 +133,7 @@ void parse_dbc_signals( unordered_map<unsigned int, const Message *>& messages,u
 	}
 
 	string unitLine = "";
-	for (size_t i = 0; i < GPS_INFO_NUM+2; i++)
+	for (size_t i = 0; i < GPS_INFO_NUM+3; i++)
 	{
 		unitLine += CSV_SPLIT_NOTICE;
 	}
@@ -140,8 +141,16 @@ void parse_dbc_signals( unordered_map<unsigned int, const Message *>& messages,u
 
 	//CAN信号
 	uint32_t signal_num = 0;
+	auto iter = messages.begin();
+	void* adr1 = (void*)iter->second;
+	iter++;
+	void* adr2 = (void*)iter->second;
+	// int diff = (int)(adr2-adr1);
+	bool bLarge = adr1 >adr2;
 	for(auto msg:messages)
 	{
+		void* adr = (void*)msg.second;
+
 		for(auto signal:msg.second->getSignals())
 		{
 			cout<<signal.second->getName();
@@ -213,7 +222,7 @@ void parse_gpsInfo(const string& orgLog,const string& timeStamp){
 		for (size_t i = 0; i < GPS_INFO_NUM; i++)//
 		{
 			getline(iss, token, ',');
-			dataLineHead[i+2] = token;
+			dataLineHead[i+3] = token;
 			// cout<<gpsInfoKeys[i]<<" = "<<token<<",";
 		}
 
@@ -232,12 +241,29 @@ void parse_gpsInfo(const string& orgLog,const string& timeStamp){
 void parse_aSingle_line(string s){
 
 	static uint16_t signalCntrParsed = 0;//已解析的信号数,如果等于Signal_Num,则输出一行文件
+	// static uint8_t lineCntr_perSec = 0;//每秒内保存的行数，如果不足10行则重复输出最后一行，little trick！
+	static uint8_t tmpOldLineTime_sec = 0;//上一行的时间 s，用于判断是否是同一秒内的数据
+	static string strLastLine = "";//上一行数据
+	static bool bRepeatLine = false;//重复输出当前行
 	string tmp;
 	//获取s单位时间戳字符串
-	string time_s_stamp_str;
+
 	int idx_tstp=s.find(",");  //从每行的第一个引号位置开始截取
-	const int time_s_stamp_len = 14;//sample:07-23 16:03:37
-	time_s_stamp_str = s.substr(idx_tstp+1,time_s_stamp_len);
+	const int date_len = 5;//sample:07-23
+	string date_str = s.substr(idx_tstp+1,date_len);
+	const int time_s_stamp_len  =8;//sample 16:03:37
+	string time_s_stamp_str = s.substr(idx_tstp+2+date_len,time_s_stamp_len);
+	dataLineHead[1] = date_str;
+	dataLineHead[2] = time_s_stamp_str;
+
+
+	string ts_s_str = time_s_stamp_str.substr(6,2);//取秒,最后两位
+	int ts_s_int = stoi(ts_s_str);
+	if (ts_s_int == (tmpOldLineTime_sec+1)%60){
+		bRepeatLine = true;
+	}
+	tmpOldLineTime_sec = ts_s_int;
+	
 
 
 	//case1,normal CAN frame,case2,parsed msg per 1s
@@ -265,12 +291,13 @@ void parse_aSingle_line(string s){
 	int num=s.find_last_of(",");//从每行的最后一个逗号位置开结束,当前帧（行）数据个数
 	if(idx != -1 && num != -1)
 	{
+		// ms timestamp
+		// uint16_t ms_stamp = num[0];
+		// time_s_stamp_str+=".";
+		// time_s_stamp_str+=to_string(ms_stamp);
+		// dataLineHead[1] = time_s_stamp_str;
 		tmp = s.substr(idx+1,num-idx-1);
 		vector<uint16_t> num = parseNumbers(tmp);//将数字字符串提取成数字
-		uint16_t ms_stamp = num[0];
-		time_s_stamp_str+=".";
-		time_s_stamp_str+=to_string(ms_stamp);
-		dataLineHead[1] = time_s_stamp_str;
 		vector<uint8_t> numbers;
 		
 		for (size_t i = 1; i < num.size(); i++)
@@ -316,21 +343,36 @@ void parse_aSingle_line(string s){
 					if (sigValues)
 					{
 						//行头
-						for (size_t i = 0; i < GPS_INFO_NUM+2; i++)
+						for (size_t i = 0; i < GPS_INFO_NUM+3; i++)
 						{
 							cout<<dataLineHead[i];
 							cout<<CSV_SPLIT_NOTICE;
+
+							strLastLine += dataLineHead[i];
+							strLastLine += CSV_SPLIT_NOTICE;
 						}
 						/* can data*/
 						for (size_t i = 0; i < Signal_Num; i++)
 						{						
 							cout<<sigValues[i];//not a safety call
 							cout<<CSV_SPLIT_NOTICE;
+
+							strLastLine += sigValues[i];
+							strLastLine += CSV_SPLIT_NOTICE;
 						}
 					}
-					
-					
 					cout<<endl;
+
+					if(bRepeatLine){
+						cout<<strLastLine<<endl;
+						bRepeatLine = false;
+					}else{
+						strLastLine = "";
+					}
+
+
+
+
 					signalCntrParsed = 0;
 					delete [] sigValues;
 					sigValues = NULL;
