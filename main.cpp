@@ -15,6 +15,7 @@
 #include <iomanip>
 #include<fstream>
 #include<vector>
+#include<algorithm>
 #include "database.hpp"
 #include "my_interfaces.hpp"
 
@@ -44,7 +45,7 @@ unordered_map<unsigned int, const Message *> msg_inDBC;
 unordered_map<string,int> signals_pos_map;
 string* sigValues = NULL;
 uint16_t Signal_Num = 0;
-const string CSV_SPLIT_NOTICE = ";";
+const string CSV_SPLIT_NOTICE = ",";
 
 #define GPS_INFO_NUM 6
 const string gpsInfoKeys[GPS_INFO_NUM] = {"longitude","latitude","Altitude","bearing","speed","IPC1_N_OdoMeter"};
@@ -147,23 +148,81 @@ void parse_dbc_signals( unordered_map<unsigned int, const Message *>& messages,u
 	void* adr2 = (void*)iter->second;
 	// int diff = (int)(adr2-adr1);
 	bool bLarge = adr1 >adr2;
-	for(auto msg:messages)
-	{
-		void* adr = (void*)msg.second;
 
-		for(auto signal:msg.second->getSignals())
+	//将signals 按照地址排序，结果是与dbc文件中的顺序一致
+	vector<pair<unsigned int,const Message*>> messages_vec(messages.begin(),messages.end());
+	sort(messages_vec.begin(),messages_vec.end(),[bLarge](const pair<unsigned int,const Message*>& a,const pair<unsigned int,const Message*>& b){
+		if (bLarge)
 		{
-			cout<<signal.second->getName();
-			cout<<CSV_SPLIT_NOTICE;//构造文件头
-			signals_pos_map[signal.second->getName()] = signal_num;
+			return a.second < b.second;
+		}else{
+			return a.second > b.second;
+		}
+	});
+
+	//遍历排序后的 messages_vec，构造文件头
+	for(auto iter = messages_vec.begin();iter!=messages_vec.end();iter++)
+	{
+		//将signals 按照地址排序，结果是与dbc文件中的顺序一致
+		unordered_map<std::string, const Signal *> signal_map = iter->second->getSignals();
+		vector<pair<string,const Signal*>> signals_vec(signal_map.begin(),signal_map.end());
+		sort(signals_vec.begin(),signals_vec.end(),[bLarge](const pair<string,const Signal*>& a,const pair<string,const Signal*>& b){
+			if (bLarge)
+			{
+				return a.second < b.second;
+			}else{
+				return a.second > b.second;
+			}
+		});
+		for (auto iter = signals_vec.begin(); iter != signals_vec.end(); iter++)
+		{
+			string sigName = iter->second->getName();
+			size_t pos = sigName.find(",");
+			if (pos != string::npos)
+			{
+				sigName.replace(pos,1,"-");
+			}
+
+			cout<<sigName;
+			cout<<CSV_SPLIT_NOTICE;
+
+			signals_pos_map[iter->second->getName()] = signal_num;//记录信号位置
 			signal_num++;
 
-
-			unitLine += signal.second->getUnit();
+			unitLine += iter->second->getUnit();//构造信号单位的一行
 			unitLine += CSV_SPLIT_NOTICE;
-
 		}
+		
+		
 	}
+
+
+
+	// for(auto msg:messages)
+	// {
+	// 	void* adr = (void*)msg.second;
+
+	// 	for(auto signal:msg.second->getSignals())
+	// 	{
+	// 		//找到信号名中含有 “,”的信号，将其替换为“_”
+	// 		string sigName = signal.second->getName();
+	// 		size_t pos = sigName.find(",");
+	// 		if (pos != string::npos)
+	// 		{
+	// 			sigName.replace(pos,1,"-");
+	// 		}
+	// 		cout<<signal.second->getName();
+	// 		cout<<CSV_SPLIT_NOTICE;//构造文件头
+	// 		signals_pos_map[signal.second->getName()] = signal_num;
+	// 		signal_num++;
+
+
+	// 		unitLine += signal.second->getUnit();
+	// 		unitLine += CSV_SPLIT_NOTICE;
+
+	// 	}
+	// }
+	
 	cout<<endl;
 	cout<<unitLine<<endl;
 
