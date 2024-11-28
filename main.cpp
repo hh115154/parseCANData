@@ -35,22 +35,29 @@ string outp_logfile_name = "C:/Users/yangh/Desktop/0716DBCLOg/qllog/parsed_log.c
 #endif
 
 void parse_dbc_signals(unordered_map<unsigned int, const Message *>& messages,unordered_map<string,int>& signals_pos_map);
+void print_title(unordered_map<unsigned int, const Message *>& messages);
 void parse_logfile(string log_file);
 void parse_logfile_content(string fileContent);
 void parse_aSingle_line(string s);
 
 
 
+
 unordered_map<unsigned int, const Message *> msg_inDBC;
-unordered_map<string,int> signals_pos_map;
+
+string* strSigTitles = NULL;
+string* strUnits = NULL;
 string* sigValues = NULL;
 uint16_t Signal_Num = 0;
 const string CSV_SPLIT_NOTICE = ",";
 
-#define GPS_INFO_NUM 6
-const string gpsInfoKeys[GPS_INFO_NUM] = {"longitude","latitude","Altitude","bearing","speed","IPC1_N_OdoMeter"};
+#define GPS_INFO_NUM 9
+const string gpsInfoKeys[GPS_INFO_NUM] = {"VIN","Date","Time","longitude","latitude","Altitude","bearing","speed","IPC1_N_OdoMeter"};
 string dataLineHead[] = {"--","date","00:00:00","0","0","0","0","0","0"};
 
+#define NUM_BUG_STR 2
+const string bugStr[] = {"，",","};
+const string replacedStr[] = {"-","_"};
 
 /*
 1, 原始日志每行一帧CAN 报文，dbc中一共几十帧报文，接收频率100ms
@@ -85,15 +92,14 @@ int main(int argc, char* argv[]){
 	}
 
 
-	/* parse dbcfile */
+	/* parse dbcfile with 3rd src*/
 	Database dbc(dbc_file);
 	msg_inDBC = dbc.getMessages();
 
-	ofstream outfile(outp_logfile_name);
+	ofstream outfile(outp_logfile_name);//输出文件
 	streambuf* default_bkp = cout.rdbuf(outfile.rdbuf());//重定向cout 到outputfile
 
-	parse_dbc_signals(msg_inDBC,signals_pos_map);
-	Signal_Num = signals_pos_map.size();//global var
+	print_title(msg_inDBC);
 
 	try
 	{
@@ -115,133 +121,87 @@ int main(int argc, char* argv[]){
 	return 0;
 }
 
-// void parse_logfile_content(string fileContent){
-// 	vector<string> lines = split_string_by_newline(fileContent);
-// 	for (string line:lines)
-// 	{
-// 		parse_aSingle_line(line);
-// 	}
-// }
+string repalce_bugStr(const string & strBug){
+	string newStr= strBug;
+	for(int i=0;i<NUM_BUG_STR;i++){
+		size_t pos = newStr.find(bugStr[i]);
+		if (pos != string::npos)
+		{
+			newStr.replace(pos,bugStr[i].size(),replacedStr[i]);
+		}
 
-void parse_dbc_signals( unordered_map<unsigned int, const Message *>& messages,unordered_map<string,int>& signals_pos_map)
-{
-	//构造文件头，首行头，非CAN信号
-	cout<<"VIN"<<CSV_SPLIT_NOTICE<<"Date"<<CSV_SPLIT_NOTICE<<"time"<<CSV_SPLIT_NOTICE;
+	}
+	return newStr;
+}
+
+
+//print 2 lines title and unit 
+void print_title(unordered_map<unsigned int, const Message *>& messages){
+	Signal_Num = 0;
+	for (auto msg:messages)
+	{
+		Signal_Num+=msg.second->getSignals().size();
+	}
+
+	strSigTitles = new string[Signal_Num];
+	strUnits = new string[Signal_Num];
+	string unitLine = "";
+	//构造文件头，首行头，非CAN信号;第二行 单位行
 	for (size_t i = 0; i < GPS_INFO_NUM; i++)
 	{
 		cout<<gpsInfoKeys[i];
 		cout<<CSV_SPLIT_NOTICE;
-	}
 
-	string unitLine = "";
-	for (size_t i = 0; i < GPS_INFO_NUM+3; i++)
-	{
 		unitLine += CSV_SPLIT_NOTICE;
 	}
-	
 
-	//CAN信号
-	uint32_t signal_num = 0;
-	auto iter = messages.begin();
-	void* adr1 = (void*)iter->second;
-	iter++;
-	void* adr2 = (void*)iter->second;
-	// int diff = (int)(adr2-adr1);
-	bool bLarge = adr1 >adr2;
 
-	//将signals 按照地址排序，结果是与dbc文件中的顺序一致
-	vector<pair<unsigned int,const Message*>> messages_vec(messages.begin(),messages.end());
-	sort(messages_vec.begin(),messages_vec.end(),[bLarge](const pair<unsigned int,const Message*>& a,const pair<unsigned int,const Message*>& b){
-		if (bLarge)
-		{
-			return a.second < b.second;
-		}else{
-			return a.second > b.second;
-		}
-	});
-
-	//遍历排序后的 messages_vec，构造文件头
-	for(auto iter = messages_vec.begin();iter!=messages_vec.end();iter++)
+	for(auto msg:messages)
 	{
-		//将signals 按照地址排序，结果是与dbc文件中的顺序一致
-		unordered_map<std::string, const Signal *> signal_map = iter->second->getSignals();
-		vector<pair<string,const Signal*>> signals_vec(signal_map.begin(),signal_map.end());
-		sort(signals_vec.begin(),signals_vec.end(),[bLarge](const pair<string,const Signal*>& a,const pair<string,const Signal*>& b){
-			if (bLarge)
-			{
-				return a.second < b.second;
-			}else{
-				return a.second > b.second;
-			}
-		});
-		for (auto iter = signals_vec.begin(); iter != signals_vec.end(); iter++)
+		for(auto signal:msg.second->getSignals())
 		{
-			string sigName = iter->second->getName();
-			size_t pos = sigName.find(",");
-			if (pos != string::npos)
-			{
-				sigName.replace(pos,1,"-");
-			}
-
-			cout<<sigName;
-			cout<<CSV_SPLIT_NOTICE;
-
-			signals_pos_map[iter->second->getName()] = signal_num;//记录信号位置
-			signal_num++;
-
-			unitLine += iter->second->getUnit();//构造信号单位的一行
-			unitLine += CSV_SPLIT_NOTICE;
+			//找到信号名中含有 “,”的信号，将其替换,
+			string sigTitle = repalce_bugStr(signal.second->getName());
+			strSigTitles[signal.second->getSigId()] = sigTitle;
+			strUnits[signal.second->getSigId()] = signal.second->getUnit();
 		}
-		
-		
 	}
-
-
-
-	// for(auto msg:messages)
-	// {
-	// 	void* adr = (void*)msg.second;
-
-	// 	for(auto signal:msg.second->getSignals())
-	// 	{
-	// 		//找到信号名中含有 “,”的信号，将其替换为“_”
-	// 		string sigName = signal.second->getName();
-	// 		size_t pos = sigName.find(",");
-	// 		if (pos != string::npos)
-	// 		{
-	// 			sigName.replace(pos,1,"-");
-	// 		}
-	// 		cout<<signal.second->getName();
-	// 		cout<<CSV_SPLIT_NOTICE;//构造文件头
-	// 		signals_pos_map[signal.second->getName()] = signal_num;
-	// 		signal_num++;
-
-
-	// 		unitLine += signal.second->getUnit();
-	// 		unitLine += CSV_SPLIT_NOTICE;
-
-	// 	}
-	// }
 	
+	//print title line
+	for (size_t i = 0; i < Signal_Num; i++)
+	{
+		cout<<strSigTitles[i]<<CSV_SPLIT_NOTICE;
+	}
 	cout<<endl;
-	cout<<unitLine<<endl;
+
+	//print unit line
+	cout<<unitLine;
+	for (size_t i = 0; i < Signal_Num; i++)
+	{
+		cout<<strUnits[i]<<CSV_SPLIT_NOTICE;
+	}
+	cout<<endl;
+
+	delete[] strSigTitles;
+	strSigTitles = NULL;
+	delete[] strUnits;
+	strUnits = NULL;
+
 
 }
 
+//parse log file from tbox,input is file path
 void parse_logfile(string log_file){
     ifstream inf;//文件读操作
 	string s;
 	inf.open(log_file);
 
-
+	//逐行解析
     while (getline(inf, s)){
 		parse_aSingle_line(s);
     }
 
 	inf.close();
-
-
-
 }
 
 void gettm(long long timestamp)
@@ -278,7 +238,7 @@ void parse_gpsInfo(const string& orgLog,const string& timeStamp){
 
 		// gettm(time_stamp);
 		
-		for (size_t i = 0; i < GPS_INFO_NUM; i++)//
+		for (size_t i = 0; i < GPS_INFO_NUM-3; i++)//
 		{
 			getline(iss, token, ',');
 			dataLineHead[i+3] = token;
@@ -287,11 +247,6 @@ void parse_gpsInfo(const string& orgLog,const string& timeStamp){
 
 		getline(iss, token, ',');//VIN
 		dataLineHead[0] = token;
-
-		int a = 0;
-		
-
-		// cout<<endl;
 
 	}	
 	
@@ -306,7 +261,6 @@ void parse_aSingle_line(string s){
 	static bool bRepeatLine = false;//重复输出当前行
 	string tmp;
 	//获取s单位时间戳字符串
-
 	int idx_tstp=s.find(",");  //从每行的第一个引号位置开始截取
 	const int date_len = 5;//sample:07-23
 	string date_str = s.substr(idx_tstp+1,date_len);
@@ -314,7 +268,6 @@ void parse_aSingle_line(string s){
 	string time_s_stamp_str = s.substr(idx_tstp+2+date_len,time_s_stamp_len);
 	dataLineHead[1] = date_str;
 	dataLineHead[2] = time_s_stamp_str;
-
 
 	string ts_s_str = time_s_stamp_str.substr(6,2);//取秒,最后两位
 	int ts_s_int = stoi(ts_s_str);
@@ -327,14 +280,14 @@ void parse_aSingle_line(string s){
 
 	//case1,normal CAN frame,case2,parsed msg per 1s
 	if (s.length() > 500)
-	{//更新行头
+	{//长行数据，更新行头
 		parse_gpsInfo(s,time_s_stamp_str);
 		return;
 		
 	}
 
 	if (0==signalCntrParsed)
-	{
+	{//普通行CAN数据
 		/* 初始化，数据值 */
 		sigValues = new string[Signal_Num];
 		for (size_t i = 0; i < Signal_Num; i++)
@@ -343,8 +296,6 @@ void parse_aSingle_line(string s){
 		}
 		
 	}
-	
-	
 	
 	int idx=s.find("\"");  //从每行的第一个引号位置开始截取
 	int num=s.find_last_of(",");//从每行的最后一个逗号位置开结束,当前帧（行）数据个数
@@ -387,8 +338,8 @@ void parse_aSingle_line(string s){
 							sig.second->getFactor(),
 							sig.second->getOffset());
 
-				string sigName = sig.second->getName();
-				int posn = signals_pos_map[sigName];
+				// string sigName = sig.second->getName();
+				int posn = sig.second->getSigId();
 				// cout<<to_string(physicalVal);
 				if (sigValues[posn] == "NULL")
 				{
@@ -402,7 +353,7 @@ void parse_aSingle_line(string s){
 					if (sigValues)
 					{
 						//行头
-						for (size_t i = 0; i < GPS_INFO_NUM+3; i++)
+						for (size_t i = 0; i < GPS_INFO_NUM; i++)
 						{
 							cout<<dataLineHead[i];
 							cout<<CSV_SPLIT_NOTICE;

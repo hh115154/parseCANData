@@ -329,11 +329,25 @@ void Signal::parse()
     throw DbcParseException();
   }
 
-  input >> temp_string;
-
-  if (temp_string.length() > 3) {
-    unit_ = temp_string.substr(1, temp_string.length() - 2);
+//>>>>>>>>>>>>>bugs fix, within uint string,maybe contains space
+  const std::string str = "\"";
+  const uint8_t CNTR = 2;
+  uint8_t cntr = 0;
+  std::string tmpUnit = "";
+  uint8_t i = 0;
+  while(cntr<CNTR){
+    input >> temp_string;
+    while(temp_string.find(str,i) != std::string::npos){
+      cntr++;
+      i = temp_string.find(str,i)+1;
+    }
+    tmpUnit += temp_string;
   }
+  // unit_ = tmpUnit;
+  if (tmpUnit.length() > 3) {
+    unit_ = tmpUnit.substr(1, tmpUnit.length() - 2);
+  }
+//<<<<<<<<<<<<bugs fix, within uint string,maybe contains space
 
   input >> temp_string;
 
@@ -354,7 +368,7 @@ void Signal::parse()
     receiving_nodes_.emplace_back(std::move(temp_string));
   }
   /* BPB modified:给信号添加唯一sequence id */
-  static uint32_t id = 1;
+  static uint32_t id = 0;//yanghongxu init it with 0 
   sig_id = id++;
 }
 
