@@ -58,14 +58,18 @@ string dataLineHead[] = {"--","date","00:00:00","0","0","0","0","0","0"};
 #define NUM_BUG_STR 2
 const string bugStr[] = {"，",","};
 const string replacedStr[] = {"-","_"};
+const string initSignalValue = "null";
+const string invalidSignalValue = "NULL";
 
 /*
 1, 原始日志每行一帧CAN 报文，dbc中一共几十帧报文，接收频率100ms
-2，解析后的日志格式是首行为信号名，以下行为几十帧报文的信号值。
+2，解析后的日志格式是首行为信号名，第二行是单位，以下行为几十帧报文的信号值。
 3，每行日志除了can信号值以外，行首还有VIN，timestamp，GPS信息。
 4, *目前关于文件结尾的处理是：一个读入的org日志文件结尾时，如果没有完成整行输出文件，仍然关闭当前输出文件。
 5, *目前关于文件头的处理是，每个org日志文件的第一帧开始，到所有帧（或所有信号）都收集齐全后，就认为一整行输出文件完成。
    4，5的原则会导致最后一行文件可能不完整，但是这个问题不大，数据没有丢失,只影响时间戳对齐。由于MCU发送给nad时，不带时间戳，时间对齐本身精度就不大。
+6, *虚假数据处理，需要保证每秒输出10行日志
+7, 原始报文的DLC最高位表示当前帧数据是否有效，1表示无效
 */
 int main(int argc, char* argv[]){
 	if (argc>1)
@@ -212,12 +216,6 @@ void gettm(long long timestamp)
     auto tt = std::chrono::system_clock::to_time_t(tp);
     std::tm *now = gmtime(&tt);
 
-	//打印时间字符串
-	// cout<<endl<<"GnssInfo : ";
-	// cout << std::put_time(now, "%Y-%m-%d %H:%M:%S");
-	// cout<<"."<<dec<<timestamp%1000<<endl;
-
-
 }
 
 	
@@ -255,7 +253,6 @@ void parse_gpsInfo(const string& orgLog,const string& timeStamp){
 void parse_aSingle_line(string s){
 
 	static uint16_t signalCntrParsed = 0;//已解析的信号数,如果等于Signal_Num,则输出一行文件
-	// static uint8_t lineCntr_perSec = 0;//每秒内保存的行数，如果不足10行则重复输出最后一行，little trick！
 	static uint8_t tmpOldLineTime_sec = 0;//上一行的时间 s，用于判断是否是同一秒内的数据
 	static string strLastLine = "";//上一行数据
 	static bool bRepeatLine = false;//重复输出当前行
@@ -292,7 +289,7 @@ void parse_aSingle_line(string s){
 		sigValues = new string[Signal_Num];
 		for (size_t i = 0; i < Signal_Num; i++)
 		{
-			sigValues[i] ="NULL";
+			sigValues[i] = initSignalValue;
 		}
 		
 	}
@@ -319,6 +316,9 @@ void parse_aSingle_line(string s){
 		msgID = msgID + numbers[0];
 
 		int dlc = numbers[2];//第三个字节是DLC,然后都是数据
+		
+		bool bMsgValid = (dlc & 0x80) == 0;//最高位表示当前帧数据是否有效，1表示无效
+		dlc &= 0x7F;//取低7位，表示数据长度
 
 		
 		//从dbc中找到msgID对应的msg
@@ -341,12 +341,19 @@ void parse_aSingle_line(string s){
 				// string sigName = sig.second->getName();
 				int posn = sig.second->getSigId();
 				// cout<<to_string(physicalVal);
-				if (sigValues[posn] == "NULL")
+				if (sigValues[posn] == initSignalValue)
 				{
 					/* code */
 					signalCntrParsed++;
 				}
-				sigValues[posn] = to_string(physicalVal);
+
+				if (bMsgValid)
+				{
+					sigValues[posn] = to_string(physicalVal);
+				}else{
+					sigValues[posn] = invalidSignalValue;
+				}
+				
 
 				if (signalCntrParsed == Signal_Num)
 				{
@@ -389,15 +396,10 @@ void parse_aSingle_line(string s){
 					return;
 				}
 				
-				// cout.precision(5);
-				// cout.width(6);
-				// cout<<sig.second->getName()<<" = "<< physicalVal<<endl;
 			}
 		}
 		else
 		{
-			//parsed msg per 1s
-			// cout<<s<<endl;
 			signalCntrParsed = 0;
 			cout<<endl;
 		}
