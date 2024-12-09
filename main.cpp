@@ -68,7 +68,7 @@ const string invalidSignalValue = "NULL";
 4, *目前关于文件结尾的处理是：一个读入的org日志文件结尾时，如果没有完成整行输出文件，仍然关闭当前输出文件。
 5, *目前关于文件头的处理是，每个org日志文件的第一帧开始，到所有帧（或所有信号）都收集齐全后，就认为一整行输出文件完成。
    4，5的原则会导致最后一行文件可能不完整，但是这个问题不大，数据没有丢失,只影响时间戳对齐。由于MCU发送给nad时，不带时间戳，时间对齐本身精度就不大。
-6, *虚假数据处理，需要保证每秒输出10行日志
+6, *保证每秒10行数据的逻辑放在python里实现，这里只保证每行数据的正确整性。
 7, 原始报文的DLC最高位表示当前帧数据是否有效，1表示无效
 */
 int main(int argc, char* argv[]){
@@ -82,7 +82,7 @@ int main(int argc, char* argv[]){
 			// cout<<"excuting process is "<< argv[0]<<endl;
 			// cout<<"org_log_file is "<<log_file<<endl;
 			// cout<<"dbc_file is "<<dbc_file<<endl;
-			cout<<"outp_logfile_name is "<<outp_logfile_name<<endl;
+			// cout<<"outp_logfile_name is "<<outp_logfile_name<<endl;
 
 		}else{
 			cout<<"argc is "<<argc<<endl;
@@ -253,9 +253,6 @@ void parse_gpsInfo(const string& orgLog,const string& timeStamp){
 void parse_aSingle_line(string s){
 
 	static uint16_t signalCntrParsed = 0;//已解析的信号数,如果等于Signal_Num,则输出一行文件
-	static uint8_t tmpOldLineTime_sec = 0;//上一行的时间 s，用于判断是否是同一秒内的数据
-	static string strLastLine = "";//上一行数据
-	static bool bRepeatLine = false;//重复输出当前行
 	string tmp;
 	//获取s单位时间戳字符串
 	int idx_tstp=s.find(",");  //从每行的第一个引号位置开始截取
@@ -268,13 +265,6 @@ void parse_aSingle_line(string s){
 
 	string ts_s_str = time_s_stamp_str.substr(6,2);//取秒,最后两位
 	int ts_s_int = stoi(ts_s_str);
-	if (ts_s_int == (tmpOldLineTime_sec+1)%60){
-		bRepeatLine = true;
-	}
-	tmpOldLineTime_sec = ts_s_int;
-	
-
-
 	//case1,normal CAN frame,case2,parsed msg per 1s
 	if (s.length() > 500)
 	{//长行数据，更新行头
@@ -298,11 +288,6 @@ void parse_aSingle_line(string s){
 	int num=s.find_last_of(",");//从每行的最后一个逗号位置开结束,当前帧（行）数据个数
 	if(idx != -1 && num != -1)
 	{
-		// ms timestamp
-		// uint16_t ms_stamp = num[0];
-		// time_s_stamp_str+=".";
-		// time_s_stamp_str+=to_string(ms_stamp);
-		// dataLineHead[1] = time_s_stamp_str;
 		tmp = s.substr(idx+1,num-idx-1);
 		vector<uint16_t> num = parseNumbers(tmp);//将数字字符串提取成数字
 		vector<uint8_t> numbers;
@@ -364,31 +349,15 @@ void parse_aSingle_line(string s){
 						{
 							cout<<dataLineHead[i];
 							cout<<CSV_SPLIT_NOTICE;
-
-							strLastLine += dataLineHead[i];
-							strLastLine += CSV_SPLIT_NOTICE;
 						}
 						/* can data*/
 						for (size_t i = 0; i < Signal_Num; i++)
 						{						
 							cout<<sigValues[i];//not a safety call
 							cout<<CSV_SPLIT_NOTICE;
-
-							strLastLine += sigValues[i];
-							strLastLine += CSV_SPLIT_NOTICE;
 						}
 					}
 					cout<<endl;
-
-					if(bRepeatLine){
-						cout<<strLastLine<<endl;
-						bRepeatLine = false;
-					}else{
-						strLastLine = "";
-					}
-
-
-
 
 					signalCntrParsed = 0;
 					delete [] sigValues;
