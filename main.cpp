@@ -250,7 +250,32 @@ void parse_gpsInfo(const string& orgLog,const string& timeStamp){
 	
 }
 
+bool bLineValid(const string & s){
+	bool bValid = true;
+	//每个完整的数据行要包含两个引号 “”
+    //每个数据行，最后一个字符是引号“
+	const string subStr = "\"";
+	int idx = 0;
+	int cntr = 0;
+	while((idx = s.find(subStr,idx))!= string::npos){
+		idx+= subStr.length();
+		cntr++;
+	}
+
+	int lastPos = s.find_last_of(subStr);
+	int len = s.length();
+
+
+	bValid = (cntr == 2)&&(lastPos == len-1);
+
+
+	return bValid;
+}
+
 void parse_aSingle_line(string s){
+
+	bool bValidLine = bLineValid(s);
+	if (!bValidLine) return;
 
 	static uint16_t signalCntrParsed = 0;//已解析的信号数,如果等于Signal_Num,则输出一行文件
 	string tmp;
